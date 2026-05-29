@@ -8,11 +8,11 @@ app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
 app.geometry("850x700")
 
-label =ctk.CTkLabel(app, text="Process Input")
+label =ctk.CTkLabel(app, text="Process Input", font=ctk.CTkFont(size=16, weight="bold"))
 label.pack(pady=10)
 
 input_frame = ctk.CTkFrame(app)
-input_frame.pack(fill="x", padx=10, pady=5)
+input_frame.pack(fill="x", padx=10, pady=5, expand=True)
 
 ctk.CTkLabel(input_frame, text="Process Name:").grid(row=0, column=0, padx=5, pady=5)
 name_input = ctk.CTkEntry(input_frame, width=70)
@@ -47,7 +47,7 @@ quantum_entry = ctk.CTkEntry(control_frame, width=30)
 quantum_entry.grid(row=0, column=3, padx=5, pady=5)
 quantum_entry.insert(0, "2")
 
-run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command='')
+run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command='', fg_color="#2FA572")
 run_btn.grid(row=0, column=4, padx=10, pady=5)
 
 clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='')
@@ -60,5 +60,8 @@ table_headers = ["Name", "Arrival Time", "Burst Time", "Priority"]
 
 table = CTkTable(master=table_frame, row=6, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
 table.pack(fill="both", expand=True)
+
+computations = ctk.StringVar(value="Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
+ctk.CTkLabel(app, textvariable=computations, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=5)
 
 app.mainloop()
