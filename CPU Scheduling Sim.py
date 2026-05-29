@@ -1,6 +1,8 @@
 import customtkinter as ctk
 import tkinter as tk 
 from tkinter import ttk, messagebox
+import CTkTable
+from CTkTable import *
 
 app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
@@ -50,5 +52,13 @@ run_btn.grid(row=0, column=4, padx=10, pady=5)
 
 clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='')
 clear_btn.grid(row=0, column=5, pady=5)
+
+table_frame = ctk.CTkFrame(app)
+table_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+table_headers = ["Name", "Arrival Time", "Burst Time", "Priority"]
+
+table = CTkTable(master=table_frame, row=6, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
+table.pack(fill="both", expand=True)
 
 app.mainloop()
