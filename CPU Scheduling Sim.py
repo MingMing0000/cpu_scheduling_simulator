@@ -1,4 +1,6 @@
 import customtkinter as ctk
+import tkinter as tk 
+from tkinter import ttk, messagebox
 
 app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
@@ -26,7 +28,27 @@ ctk.CTkLabel(input_frame, text="Priority:").grid(row=0, column=6, padx=5, pady=5
 priority_input = ctk.CTkEntry(input_frame, width=70)
 priority_input.grid(row=0, column=7, padx=5, pady=5)
 
-add_btn = ctk.CTkButton(input_frame, text="Add Process")
+add_btn = ctk.CTkButton(input_frame, text="Add Process", command='')
 add_btn.grid(row=0, column=8, padx=15, pady=5)
+
+control_frame = ctk.CTkFrame(app,)
+control_frame.pack(fill="x", padx=10, pady=10)
+
+ctk.CTkLabel(control_frame, text="Algorithm:").grid(row=0, column=0, padx=5, pady=5)
+algo_var = ctk.StringVar(value="FCFS")
+algorithms = ["FCFS", "Round Robin"]
+algo_dropdown = ctk.CTkComboBox(control_frame, variable=algo_var, values=algorithms, state="readonly", width=200)
+algo_dropdown.grid(row=0, column=1, padx=5, pady=5)
+
+ctk.CTkLabel(control_frame, text="Time Quantum (for RR):").grid(row=0, column=2, padx=(20, 5))
+quantum_entry = ctk.CTkEntry(control_frame, width=30)
+quantum_entry.grid(row=0, column=3, padx=5, pady=5)
+quantum_entry.insert(0, "2")
+
+run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command='')
+run_btn.grid(row=0, column=4, padx=10, pady=5)
+
+clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='')
+clear_btn.grid(row=0, column=5, pady=5)
 
 app.mainloop()
