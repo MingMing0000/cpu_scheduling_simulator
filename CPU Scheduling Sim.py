@@ -6,13 +6,13 @@ from CTkTable import *
 
 app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
-app.geometry("850x700")
+app.geometry("805x700")
 
 label =ctk.CTkLabel(app, text="Process Input", font=ctk.CTkFont(size=16, weight="bold"))
 label.pack(pady=10)
 
 input_frame = ctk.CTkFrame(app)
-input_frame.pack(fill="x", padx=10, pady=5, expand=True)
+input_frame.pack(fill="x", padx=10, pady=5)
 
 ctk.CTkLabel(input_frame, text="Process Name:").grid(row=0, column=0, padx=5, pady=5)
 name_input = ctk.CTkEntry(input_frame, width=70)
@@ -39,18 +39,18 @@ control_frame.pack(fill="x", padx=10, pady=10)
 ctk.CTkLabel(control_frame, text="Algorithm:").grid(row=0, column=0, padx=5, pady=5)
 algo_var = ctk.StringVar(value="FCFS")
 algorithms = ["FCFS", "Round Robin"]
-algo_dropdown = ctk.CTkComboBox(control_frame, variable=algo_var, values=algorithms, state="readonly", width=200)
+algo_dropdown = ctk.CTkComboBox(control_frame, variable=algo_var, values=algorithms, state="readonly", width=190)
 algo_dropdown.grid(row=0, column=1, padx=5, pady=5)
 
 ctk.CTkLabel(control_frame, text="Time Quantum (for RR):").grid(row=0, column=2, padx=(20, 5))
-quantum_entry = ctk.CTkEntry(control_frame, width=30)
+quantum_entry = ctk.CTkEntry(control_frame, width=40)
 quantum_entry.grid(row=0, column=3, padx=5, pady=5)
 quantum_entry.insert(0, "2")
 
 run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command='', fg_color="#2FA572")
 run_btn.grid(row=0, column=4, padx=10, pady=5)
 
-clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='')
+clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='', fg_color="#E85D04")
 clear_btn.grid(row=0, column=5, pady=5)
 
 table_frame = ctk.CTkFrame(app)
@@ -63,5 +63,13 @@ table.pack(fill="both", expand=True)
 
 computations = ctk.StringVar(value="Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
 ctk.CTkLabel(app, textvariable=computations, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=5)
+
+gantt_frame = ctk.CTkFrame(app)
+gantt_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        
+ctk.CTkLabel(gantt_frame, text="Gantt Chart", font=ctk.CTkFont(size=16, weight="bold")).pack(anchor="w", padx=10, pady=10)
+            
+canvas = tk.Canvas(gantt_frame, bg="#2b2b2b", highlightthickness=0, height=100)
+canvas.pack(fill="both", expand=True, padx=10, pady=(0, 10))
 
 app.mainloop()
