@@ -33,7 +33,7 @@ priority_input.grid(row=0, column=7, padx=5, pady=5)
 add_btn = ctk.CTkButton(input_frame, text="Add Process", command='')
 add_btn.grid(row=0, column=8, padx=15, pady=5)
 
-control_frame = ctk.CTkFrame(app,)
+control_frame = ctk.CTkFrame(app)
 control_frame.pack(fill="x", padx=10, pady=10)
 
 ctk.CTkLabel(control_frame, text="Algorithm:").grid(row=0, column=0, padx=5, pady=5)
@@ -53,13 +53,10 @@ run_btn.grid(row=0, column=4, padx=10, pady=5)
 clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='', fg_color="#E85D04")
 clear_btn.grid(row=0, column=5, pady=5)
 
-table_frame = ctk.CTkFrame(app)
-table_frame.pack(fill="both", expand=True, padx=10, pady=10)
-
 table_headers = ["Name", "Arrival Time", "Burst Time", "Priority"]
 
-table = CTkTable(master=table_frame, row=6, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
-table.pack(fill="both", expand=True)
+table = CTkTable(app, row=6, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
+table.pack(fill="both", expand=True, padx=20, pady=10)
 
 computations = ctk.StringVar(value="Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
 ctk.CTkLabel(app, textvariable=computations, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=5)
