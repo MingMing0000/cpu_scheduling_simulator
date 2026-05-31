@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 import CTkTable
 from CTkTable import *
 from CTkMessagebox import CTkMessagebox
+from scheduling_algorithms import SchedulingAlgorithms
 
 processes = []
 
@@ -33,6 +34,36 @@ def add_process():
         arrival_input.delete(0, ctk.END)
         burst_input.delete(0, ctk.END)
         priority_input.delete(0, ctk.END)
+
+def clear_all():
+        processes.clear()
+        table.update_values([table_headers])
+        canvas.delete("all")
+        computations.set("Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
+
+def run_simulation():
+    if not processes:
+        messagebox.showwarning("Warning", "No processes to simulate.")
+        return
+
+    algo = algo_var.get()
+    
+    for p in processes:
+        p['rem_bt'] = p['bt']
+
+    if algo == "FCFS":
+        schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_fcfs(processes)
+    elif algo == "Round Robin":
+        try:
+            tq = int(quantum_entry.get())
+            if tq <= 0: raise ValueError
+        except ValueError:
+            messagebox.showerror("Input Error", "Time Quantum must be a positive integer.")
+            return
+        schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_rr(processes, tq)
+
+    computations.set(f"Avg Turnaround Time: {avg_tat:.2f} ms   |   Avg Waiting Time: {avg_wt:.2f} ms")
+    #draw_gantt_chart(schedule)
 
 app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
@@ -77,15 +108,15 @@ quantum_entry = ctk.CTkEntry(control_frame, width=40)
 quantum_entry.grid(row=0, column=3, padx=5, pady=5)
 quantum_entry.insert(0, "2")
 
-run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command='', fg_color="#2FA572")
+run_btn = ctk.CTkButton(control_frame, text="Run Simulation", command=run_simulation, fg_color="#2FA572")
 run_btn.grid(row=0, column=4, padx=10, pady=5)
 
-clear_btn = ctk.CTkButton(control_frame, text="Clear All", command='', fg_color="#E85D04")
+clear_btn = ctk.CTkButton(control_frame, text="Clear All", command=clear_all, fg_color="#E85D04")
 clear_btn.grid(row=0, column=5, pady=5)
 
 table_headers = ["Name", "Arrival Time", "Burst Time", "Priority"]
 
-table = CTkTable(app, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
+table = CTkTable(app, values=[table_headers], colors=["gray14", "gray16"], header_color="gray20", text_color="white")
 table.pack(fill="both", expand=True, padx=20, pady=10)
 
 computations = ctk.StringVar(value="Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
