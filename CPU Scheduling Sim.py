@@ -3,6 +3,36 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import CTkTable
 from CTkTable import *
+from CTkMessagebox import CTkMessagebox
+
+processes = []
+
+def add_process():
+        name = name_input.get()
+        at = arrival_input.get()
+        bt = burst_input.get()
+        pr = priority_input.get() or "0"
+
+        if not (name and at and bt):
+            CTkMessagebox(title="Input Error", message="Please fill in all required fields (Name, Arrival Time, Burst Time).", icon="cancel")
+            return
+
+        try:
+            at = int(at)
+            bt = int(bt)
+            pr = int(pr)
+        except ValueError:
+            CTkMessagebox(title="Input Error", message="Arrival Time, Burst Time, and Priority must be integers.", icon="cancel")
+            return
+
+        processes.append({"name": name, "at": at, "bt": bt, "pr": pr, "rem_bt": bt})
+        
+        table.add_row([name, at, bt, pr])
+
+        name_input.delete(0, ctk.END)
+        arrival_input.delete(0, ctk.END)
+        burst_input.delete(0, ctk.END)
+        priority_input.delete(0, ctk.END)
 
 app = ctk.CTk()
 app.title("CPU Scheduling Simulator")
@@ -30,7 +60,7 @@ ctk.CTkLabel(input_frame, text="Priority:").grid(row=0, column=6, padx=5, pady=5
 priority_input = ctk.CTkEntry(input_frame, width=70)
 priority_input.grid(row=0, column=7, padx=5, pady=5)
 
-add_btn = ctk.CTkButton(input_frame, text="Add Process", command='')
+add_btn = ctk.CTkButton(input_frame, text="Add Process", command=add_process)
 add_btn.grid(row=0, column=8, padx=15, pady=5)
 
 control_frame = ctk.CTkFrame(app)
@@ -55,7 +85,7 @@ clear_btn.grid(row=0, column=5, pady=5)
 
 table_headers = ["Name", "Arrival Time", "Burst Time", "Priority"]
 
-table = CTkTable(app, row=6, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
+table = CTkTable(app, values=[table_headers], colors=["#1C1A1A", "#0E0D0D"], header_color="#1E1A1A", text_color="white")
 table.pack(fill="both", expand=True, padx=20, pady=10)
 
 computations = ctk.StringVar(value="Avg Turnaround Time: 0.00 ms   |   Avg Waiting Time: 0.00 ms")
