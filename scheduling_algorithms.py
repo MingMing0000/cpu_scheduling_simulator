@@ -172,3 +172,39 @@ class SchedulingAlgorithms:
             total_wt += wt
 
         return schedule, total_tat / num_of_processes, total_wt / num_of_processes
+    
+    @staticmethod
+    def simulate_priority_nonpreemptive(processes):
+        n = len(processes)
+        completed = 0
+        current_time = 0
+        schedule = []
+        total_tat = 0
+        total_wt = 0
+        
+        is_completed = {p['name']: False for p in processes}
+        
+        while completed < n:
+            available = [p for p in processes if p['at'] <= current_time and not is_completed[p['name']]]
+            
+            if not available:
+                next_arrival = min([p['at'] for p in processes if not is_completed[p['name']]])
+                current_time = next_arrival
+                continue
+            
+            available.sort(key=lambda x: (x['pr'], x['at']))
+            p = available[0] 
+            
+            start_time = current_time
+            current_time += p['bt']
+            is_completed[p['name']] = True
+            completed += 1
+            
+            tat = current_time - p['at']
+            wt = tat - p['bt']
+            total_tat += tat
+            total_wt += wt
+            
+            schedule.append((p['name'], start_time, current_time))
+            
+        return schedule, total_tat / n, total_wt / n
