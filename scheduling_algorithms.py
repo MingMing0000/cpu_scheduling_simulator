@@ -208,3 +208,68 @@ class SchedulingAlgorithms:
             schedule.append((p['name'], start_time, current_time))
             
         return schedule, total_tat / n, total_wt / n
+    
+    @staticmethod
+    def simulate_priority_preemptive(processes):
+        n = len(processes)
+        completed = 0
+        current_time = 0
+        schedule = []
+        total_tat = 0
+        total_wt = 0
+        
+        completion_times = {}
+        current_process = None
+        block_start_time = 0
+        
+        while completed < n:
+            # Find all processes that have arrived and still have remaining burst time
+            available = [p for p in processes if p['at'] <= current_time and p['rem_bt'] > 0]
+            
+            if not available:
+                # Idle CPU: Close out any running block
+                if current_process is not None:
+                    schedule.append((current_process, block_start_time, current_time))
+                    current_process = None
+                
+                # Advance clock to the next arrival time
+                next_arrival = min([p['at'] for p in processes if p['rem_bt'] > 0])
+                current_time = max(current_time + 1, next_arrival)
+                continue
+            
+            # THE ONLY CHANGE: Sort by Priority (lowest number = highest priority)
+            # Tie-breaker is still Arrival Time
+            available.sort(key=lambda x: (x['pr'], x['at']))
+            highest_priority = available[0]
+            
+            # Check for a Context Switch
+            if current_process != highest_priority['name']:
+                # If a different process was just running, log its block
+                if current_process is not None:
+                    schedule.append((current_process, block_start_time, current_time))
+                
+                # Start tracking the new process
+                current_process = highest_priority['name']
+                block_start_time = current_time
+            
+            # Execute the process for 1 time unit
+            highest_priority['rem_bt'] -= 1
+            current_time += 1
+            
+            # Check if the process just finished
+            if highest_priority['rem_bt'] == 0:
+                completed += 1
+                completion_times[highest_priority['name']] = current_time
+                
+                # Log its final block into the schedule
+                schedule.append((current_process, block_start_time, current_time))
+                current_process = None # Clear the CPU
+
+        # Calculate final Averages
+        for p in processes:
+            tat = completion_times[p['name']] - p['at']
+            wt = tat - p['bt']
+            total_tat += tat
+            total_wt += wt
+
+        return schedule, total_tat / n, total_wt / n

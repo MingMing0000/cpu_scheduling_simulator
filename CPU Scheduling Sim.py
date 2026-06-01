@@ -62,6 +62,8 @@ def run_simulation():
          schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_srtf(processes)
     elif algo == "Priority - Non-Preemptive":
          schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_priority_nonpreemptive(processes)
+    elif algo == "Priority - Preemptive":
+         schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_priority_preemptive(processes)
     elif algo == "Round Robin":
         try:
             tq = int(quantum_entry.get())
@@ -149,7 +151,7 @@ control_frame.pack(fill="x", padx=10, pady=10)
 
 ctk.CTkLabel(control_frame, text="Algorithm:").grid(row=0, column=0, padx=5, pady=5)
 algo_var = ctk.StringVar(value="FCFS")
-algorithms = ["FCFS", "SJF - Non-Preemptive", "SJF - Preemptive", "Priority - Non-Preemptive", "Round Robin"]
+algorithms = ["FCFS", "SJF - Non-Preemptive", "SJF - Preemptive", "Priority - Non-Preemptive", "Priority - Preemptive", "Round Robin"]
 algo_dropdown = ctk.CTkComboBox(control_frame, variable=algo_var, values=algorithms, state="readonly", width=190)
 algo_dropdown.grid(row=0, column=1, padx=5, pady=5)
 
