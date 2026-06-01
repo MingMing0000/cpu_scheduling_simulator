@@ -93,31 +93,24 @@ class SchedulingAlgorithms:
         total_tat = 0
         total_wt = 0
         
-        # Keep track of which processes are finished so we don't pick them again
         is_completed = {p['name']: False for p in processes}
         
         while completed < num_of_processes:
-            # Gather all processes that have arrived and are not finished
             available = [p for p in processes if p['at'] <= current_time and not is_completed[p['name']]]
             
             if not available:
-                # If no one has arrived yet, jump the clock forward to the next arrival time (Idle CPU)
                 next_arrival = min([p['at'] for p in processes if not is_completed[p['name']]])
                 current_time = next_arrival
                 continue
             
-            # Sort the available processes by Burst Time. 
-            # If there's a tie, fall back to Arrival Time.
             available.sort(key=lambda x: (x['bt'], x['at']))
-            p = available[0] # Pick the shortest
+            p = available[0] 
             
-            # Execute the process
             start_time = current_time
             current_time += p['bt']
             is_completed[p['name']] = True
             completed += 1
             
-            # Calculate metrics
             tat = current_time - p['at']
             wt = tat - p['bt']
             total_tat += tat
@@ -125,4 +118,57 @@ class SchedulingAlgorithms:
             
             schedule.append((p['name'], start_time, current_time))
             
+        return schedule, total_tat / num_of_processes, total_wt / num_of_processes
+
+    @staticmethod
+    def simulate_srtf(processes):
+        num_of_processes = len(processes)
+        completed = 0
+        current_time = 0
+        schedule = []
+        total_tat = 0
+        total_wt = 0
+        
+        completion_times = {}
+        current_process = None
+        block_start_time = 0
+        
+        while completed < num_of_processes:
+            available = [p for p in processes if p['at'] <= current_time and p['rem_bt'] > 0]
+            
+            if not available:
+                if current_process is not None:
+                    schedule.append((current_process, block_start_time, current_time))
+                    current_process = None
+                
+                next_arrival = min([p['at'] for p in processes if p['rem_bt'] > 0])
+                current_time = max(current_time + 1, next_arrival)
+                continue
+            
+            available.sort(key=lambda x: (x['rem_bt'], x['at']))
+            shortest = available[0]
+            
+            if current_process != shortest['name']:
+                if current_process is not None:
+                    schedule.append((current_process, block_start_time, current_time))
+                
+                current_process = shortest['name']
+                block_start_time = current_time
+            
+            shortest['rem_bt'] -= 1
+            current_time += 1
+            
+            if shortest['rem_bt'] == 0:
+                completed += 1
+                completion_times[shortest['name']] = current_time
+                
+                schedule.append((current_process, block_start_time, current_time))
+                current_process = None 
+
+        for p in processes:
+            tat = completion_times[p['name']] - p['at']
+            wt = tat - p['bt']
+            total_tat += tat
+            total_wt += wt
+
         return schedule, total_tat / num_of_processes, total_wt / num_of_processes
