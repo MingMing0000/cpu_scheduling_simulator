@@ -55,7 +55,11 @@ def run_simulation():
         p['rem_bt'] = p['bt']
 
     if algo == "FCFS":
-        schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_fcfs(processes)
+         schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_fcfs(processes)
+    elif algo == "SJF - Non-Preemptive":
+         schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_sjf(processes)
+    #elif algo == "Priority":
+         #schedule, avg_tat, avg_wt = SchedulingAlgorithms.simulate_priority(processes)
     elif algo == "Round Robin":
         try:
             tq = int(quantum_entry.get())
@@ -143,7 +147,7 @@ control_frame.pack(fill="x", padx=10, pady=10)
 
 ctk.CTkLabel(control_frame, text="Algorithm:").grid(row=0, column=0, padx=5, pady=5)
 algo_var = ctk.StringVar(value="FCFS")
-algorithms = ["FCFS", "Round Robin"]
+algorithms = ["FCFS", "Round Robin", "SJF - Non-Preemptive", "Priority"]
 algo_dropdown = ctk.CTkComboBox(control_frame, variable=algo_var, values=algorithms, state="readonly", width=190)
 algo_dropdown.grid(row=0, column=1, padx=5, pady=5)
 
