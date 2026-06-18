@@ -1,43 +1,43 @@
 # CPU Scheduling Simulator
 
-A simple, interactive command-line simulator that demonstrates and compares classic CPU scheduling algorithms. The program runs First-Come-First-Served (FCFS), Shortest Job First (SJF), Priority Scheduling, and Round Robin (RR), and calculates key scheduling metrics such as Average Turnaround Time and Average Waiting Time for the set of processes.
+A simple, GUI-based simulator built with Tkinter that demonstrates and compares classic CPU scheduling algorithms. The program provides an interactive window where users can add processes and choose scheduling algorithms to visualize how each policy behaves.
 
 ## Features
 
 - Implements common CPU scheduling algorithms: FCFS, SJF, Priority, and Round Robin.
 - Computes Average Turnaround Time and Average Waiting Time for each algorithm.
-- Accepts process definitions (arrival time, burst time, priority) and scheduling parameters (e.g., time quantum for Round Robin).
-- Displays scheduling order and basic timeline information to help visualize how each algorithm behaves.
+- Accepts process definitions (arrival time, burst time, priority) and scheduling parameters (e.g., time quantum for Round Robin) via a Tkinter form.
+- Displays scheduling order and a basic timeline/Gantt-like view to help visualize how each algorithm behaves.
 
 ## What this program is for
 
-This simulator is intended for students, educators, and anyone learning operating systems concepts. It provides a hands-on way to see how different CPU scheduling policies affect process order and performance metrics, and to compare trade-offs between fairness, throughput, and responsiveness.
+This simulator is intended for students, educators, and anyone learning operating systems concepts. It provides a hands-on GUI that makes it easy to add and modify processes, run different scheduling algorithms, and compare results visually.
 
 ## Input
 
-Provide a list of processes. Each process should include at least:
+Use the Tkinter GUI to add processes. Each process should include at least:
 - Process ID (or name)
 - Arrival time
 - Burst (CPU) time
 - Priority (for Priority Scheduling)
 
-The program may accept interactive prompt input or a simple text/CSV input depending on the command-line interface implementation.
+The GUI provides fields to enter these values and buttons to add, edit, or remove processes. For Round Robin, set the time quantum using the provided input. (If the project later adds a file/CSV import option, this section can be expanded.)
 
 ## Output
 
-For each chosen algorithm, the simulator prints:
+When you run a chosen algorithm from the GUI, the simulator shows:
 - The order in which processes are scheduled.
 - Turnaround time and waiting time for each process.
 - Average Turnaround Time and Average Waiting Time across all processes.
-- (Optional) A textual timeline/Gantt-like view to visualize scheduling.
+- A textual or simple graphical timeline/Gantt-like view to visualize scheduling.
 
 ## Example usage
 
-Run the program with Python 3 and follow the prompts to enter processes and select an algorithm. If the repository exposes a script name (for example `simulator.py` or `main.py`), run it with:
+Run the program with Python 3. If the repository exposes a script (for example `simulator.py` or `main.py`), launch it with:
 
 python <script>.py
 
-Then follow the on-screen instructions to enter processes and algorithm options (e.g., set the time quantum for Round Robin).
+The Tkinter window will open. Use the on-screen form to add processes, choose an algorithm, and run the simulation. Adjust parameters (like time quantum) through the GUI controls.
 
 ## Learning outcomes
 
@@ -47,7 +47,7 @@ Then follow the on-screen instructions to enter processes and algorithm options 
 
 ## Contributing
 
-Contributions are welcome — open an issue or submit a pull request with bug fixes, new features (preemptive SJF, Gantt chart visualization, file-based input), or documentation improvements.
+Contributions are welcome — open an issue or submit a pull request with bug fixes, new features (preemptive SJF, improved Gantt chart visualization, file-based input), or documentation improvements.
 
 ## License
 
